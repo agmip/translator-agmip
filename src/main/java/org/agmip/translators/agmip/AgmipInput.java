@@ -1,12 +1,19 @@
 package org.agmip.translators.agmip;
 
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipEntry;
 
 
 import org.agmip.core.types.TranslatorInput;
@@ -19,12 +26,46 @@ import org.slf4j.LoggerFactory;
 
 public class AgmipInput implements TranslatorInput {
     private static final Logger LOG = LoggerFactory.getLogger(AgmipInput.class);
+    private HashMap<String, Object> finalMap = new HashMap<String, Object>();
     
     public Map readFile(String fileName) {
-        LinkedHashMap map = new LinkedHashMap();
+        ArrayList<HashMap<String, Object>> container = new ArrayList<HashMap<String, Object>>();
+        // Since this is a weather only input translator, we can simplify
+        // the creation by putting the resulting map directly in the ArrayList.
+
+        try {
+        if (fileName.toUpperCase().endsWith("AGMIP")) {
+            container.add(readAgMIPFile(new FileInputStream(fileName), fileName));
+        } else if (fileName.toUpperCase().endsWith("ZIP")) {
+            //Handle a ZipInputStream instead
+            LOG.debug("Launching zip file handler");
+            ZipFile zf = new ZipFile(fileName);
+            Enumeration<? extends ZipEntry> e = zf.entries();
+            while (e.hasMoreElements()) {
+                ZipEntry ze = (ZipEntry) e.nextElement();
+                LOG.debug("Entering file: " + ze);
+                if (ze.getName().toUpperCase().endsWith("AGMIP")) {
+                    container.add(readAgMIPFile(zf.getInputStream(ze), ze.getName()));
+                }
+            }
+            zf.close();
+        }
+        } catch (FileNotFoundException ex) {
+            LOG.error("File not found error: {}", ex.getMessage());
+            return new HashMap<String, Object>();
+        } catch (IOException ex) {
+            LOG.error(ex.getMessage());
+            return new HashMap<String, Object>();
+        }
+        finalMap.put("weathers", container);
+        return finalMap;
+    }
+
+    private HashMap<String, Object> readAgMIPFile(InputStream fileStream, String fileName) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
         String defValue = "-99";
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
             String[] extraData = reader.readLine().split("[:]");
             reader.readLine();
             reader.readLine();
@@ -85,7 +126,7 @@ public class AgmipInput implements TranslatorInput {
         }
         // Remove extraneous wst_id
         map.remove("wst_id");
-        return map;
+        return (HashMap<String, Object>) map.get("weather");
     }
     
     private String[] extractData(String line) {
