@@ -26,8 +26,6 @@ public class TranslationTest {
     public void runTranslation() {
         AgmipInput in = new AgmipInput();
         Map results = in.readFile(resource.getPath());
-        LOG.info("Translation Results: "+results);
+        //LOG.info("Translation Results: "+results);
     }
-    
-    
 }

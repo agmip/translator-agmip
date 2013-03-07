@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class AgmipInput implements TranslatorInput {
     private static final Logger LOG = LoggerFactory.getLogger(AgmipInput.class);
     private HashMap<String, Object> finalMap = new HashMap<String, Object>();
-    
+
     public Map readFile(String fileName) {
         ArrayList<HashMap<String, Object>> container = new ArrayList<HashMap<String, Object>>();
         // Since this is a weather only input translator, we can simplify
@@ -63,7 +63,10 @@ public class AgmipInput implements TranslatorInput {
 
     private HashMap<String, Object> readAgMIPFile(InputStream fileStream, String fileName) {
         HashMap<String, Object> map = new HashMap<String, Object>();
+        String baseFile = FilenameUtils.getBaseName(fileName);
+        String climid   = "0XXX";
         String defValue = "-99";
+        
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
             String[] extraData = reader.readLine().split("[:]");
@@ -71,13 +74,28 @@ public class AgmipInput implements TranslatorInput {
             reader.readLine();
             String[] locationData = extractData(reader.readLine());
             
-            AcePathfinderUtil.insertValue(map, "wst_name", FilenameUtils.getBaseName(fileName));
+            AcePathfinderUtil.insertValue(map, "wst_name", baseFile);
             AcePathfinderUtil.insertValue(map, "wst_notes", ".AgMIP File");
             AcePathfinderUtil.insertValue(map, "wst_source", extraData[1]);
-            AcePathfinderUtil.insertValue(map, "wst_id", locationData[0]);
+            AcePathfinderUtil.insertValue(map, "wst_id", baseFile);
             AcePathfinderUtil.insertValue(map, "wst_lat", locationData[1]);
             AcePathfinderUtil.insertValue(map, "wst_long", locationData[2]);
-            
+
+            if(baseFile.length() == 8) {
+                climid = baseFile.substring(4);
+                if (isValidClimateID(climid)) {
+                    LOG.debug("Valid ClimateID: {}", climid);
+                    AcePathfinderUtil.insertValue(map, "clim_id", climid);
+                } else {
+                    LOG.debug("Invalid ClimateID: {}", climid);
+                    AcePathfinderUtil.insertValue(map, "clim_id", "0XXX");
+                }
+            } else {
+                LOG.debug("Filename incorrect length: {}", climid);
+                AcePathfinderUtil.insertValue(map, "clim_id", climid);
+            }
+
+
             // Handle the rest of the values with help for -99 values
             String[] locKeys = {"wst_elev", "tav", "tamp", "refht", "wndht"};
             int l = locKeys.length;
@@ -132,5 +150,13 @@ public class AgmipInput implements TranslatorInput {
     private String[] extractData(String line) {
         line = line.trim().replaceAll("\\s+", "|");
         return line.split("[|]");
+    }
+    
+
+    // Currently, hard code this information to validate. Should be
+    // handled by the ace-lookup eventually.
+    private boolean isValidClimateID(String climid) {
+        String pattern = "[0-6A-F][0A-LN-PW-Z][0-7A-EX][A-KX]";
+        return climid.matches(pattern);
     }
 }
