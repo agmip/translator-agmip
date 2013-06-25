@@ -18,6 +18,7 @@ import java.util.zip.ZipEntry;
 
 import org.agmip.core.types.TranslatorInput;
 import org.agmip.ace.util.AcePathfinderUtil;
+import org.agmip.common.Functions;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -131,6 +132,8 @@ public class AgmipInput implements TranslatorInput {
                             double wind = Double.parseDouble(data[v]);
                             wind = wind*86.4;
                             val = String.format("%.1f", wind);
+                        } else if (i == 7) {
+                            val = Functions.divide(data[v], "10");
                         } else {
                             val = data[v];
                         }
