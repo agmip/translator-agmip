@@ -108,7 +108,7 @@ public class AgmipInput implements TranslatorInput {
             }
             reader.readLine();
             String dataLine;
-            String[] dataKeys = {"w_date", "srad", "tmax", "tmin", "rain", "wind", "dewp", "vprsd", "rhumd"};
+            String[] dataKeys = {"w_date", "srad", "tmax", "tmin", "rain", "wind", "tdew", "vprsd", "rhumd"};
             l = dataKeys.length;
             while((dataLine = reader.readLine()) != null) {
                 String[] data = extractData(dataLine);
