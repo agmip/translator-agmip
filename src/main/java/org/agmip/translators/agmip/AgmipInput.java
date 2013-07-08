@@ -64,7 +64,7 @@ public class AgmipInput implements TranslatorInput {
         HashMap<String, Object> map = new HashMap<String, Object>();
         String baseFile = FilenameUtils.getBaseName(fileName);
         String climid   = "0XXX";
-        String defValue = "-99";
+//        String defValue = "-99";
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
@@ -145,7 +145,7 @@ public class AgmipInput implements TranslatorInput {
             }
             reader.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error(Functions.getStackTrace(ex));
         }
         // Remove extraneous wst_id
         map.remove("wst_id");
