@@ -85,11 +85,11 @@ public class AgmipInput implements TranslatorInput {
                     LOG.debug("Valid ClimateID: {}", climid);
                     AcePathfinderUtil.insertValue(map, "clim_id", climid);
                 } else {
-                    LOG.debug("Invalid ClimateID: {}", climid);
-                    AcePathfinderUtil.insertValue(map, "clim_id", "0XXX");
+                    LOG.warn("Invalid ClimateID: {}", climid);
+                    AcePathfinderUtil.insertValue(map, "clim_id", climid);
                 }
             } else {
-                LOG.debug("Filename incorrect length: {}", climid);
+                LOG.warn("Filename incorrect length: {}", climid);
                 AcePathfinderUtil.insertValue(map, "clim_id", climid);
             }
 
@@ -174,7 +174,7 @@ public class AgmipInput implements TranslatorInput {
     // Currently, hard code this information to validate. Should be
     // handled by the ace-lookup eventually.
     private boolean isValidClimateID(String climid) {
-        String pattern = "[0-6A-F][0A-LN-PW-Z][0-7A-EX][A-KX]";
+        String pattern = "[0-9A-Z]{4}"; //[0-6A-F][0A-LN-PW-Z][0-7A-EX][A-KX]";
         return climid.matches(pattern);
     }
 
