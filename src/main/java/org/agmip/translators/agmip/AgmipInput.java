@@ -75,7 +75,7 @@ public class AgmipInput implements TranslatorInput {
             AcePathfinderUtil.insertValue(map, "wst_name", baseFile);
             AcePathfinderUtil.insertValue(map, "wst_notes", ".AgMIP File");
             AcePathfinderUtil.insertValue(map, "wst_source", extraData[1]);
-            AcePathfinderUtil.insertValue(map, "wst_id", baseFile);
+            AcePathfinderUtil.insertValue(map, "wst_id", baseFile.substring(0, Math.min(baseFile.length(), 4)));
 //            AcePathfinderUtil.insertValue(map, "wst_lat", locationData.get("wst_lat"));
 //            AcePathfinderUtil.insertValue(map, "wst_long", locationData.get("wst_long"));
 
