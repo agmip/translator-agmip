@@ -53,6 +53,9 @@ public class AceWeatherAdaptor {
         String ret;
         try {
             ret = wth.getValueOr("insi", wth.getValueOr("wst_id", defVal));
+            if (ret.length() > 4) {
+                ret = ret.substring(0, 4);
+            }
         } catch (Exception ex) {
             LOG.error(ex.getMessage());
             ret = defVal;

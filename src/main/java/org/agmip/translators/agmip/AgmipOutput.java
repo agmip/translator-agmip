@@ -49,8 +49,12 @@ public class AgmipOutput implements TranslatorOutput {
             LOG.warn("Missing weather station ID, will skip this weather data");
             return null;
         }
+        String fileName = wstId;
+        if (wstId.length() > 4 || !wstId.endsWith(climId)) {
+            fileName = fileName.substring(0 ,4) + climId;
+        }
         
-        File ret = new File(outputDirectory.getPath() + File.separator + wstId + climId + ".AgMIP");
+        File ret = new File(outputDirectory.getPath() + File.separator + fileName + ".AgMIP");
         AceWeatherAdaptor wthAdp = new AceWeatherAdaptor(wth);
         Velocity.init();
         VelocityContext context = new VelocityContext();
