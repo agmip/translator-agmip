@@ -41,6 +41,8 @@ public class AceWeatherAdaptor {
         if (varLenDef.isEmpty()) {
             varLenDef.put("wst_long", 9);
             varLenDef.put("wst_lat", 9);
+            varLenDef.put("clim_id", 8);
+            varLenDef.put("clim_cat", 8);
         }
 
     }

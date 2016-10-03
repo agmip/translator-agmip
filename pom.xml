@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.agmip.translators</groupId>
     <artifactId>translator-agmip</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <name>AgMIP .AgMIP format ACE Translator</name>
     <url>http://www.agmip.org/</url>
 
@@ -56,6 +56,7 @@
         <dependency>
             <groupId>org.agmip</groupId>
             <artifactId>ace-lookup</artifactId>
+            <version>1.2.5</version>
         </dependency>
         <dependency>
             <groupId>org.agmip</groupId>
@@ -86,7 +87,7 @@
         <connection>scm:git:git://github.com/agmip/translator-agmip.git</connection>
         <developerConnection>scm:git:git@github.com:agmip/translator-agmip.git</developerConnection>
         <url>https://github.com/agmip/translator-agmip</url>
-      <tag>translator-agmip-1.2.2</tag>
+      <tag>translator-agmip-1.2.3</tag>
     </scm>
     <build>
         <plugins>
