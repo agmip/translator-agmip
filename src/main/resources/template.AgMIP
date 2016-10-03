@@ -1,7 +1,7 @@
 *WEATHER DATA : $weather.wst_source
 
-@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT
-$weather.insi$weather.wst_lat$weather.wst_long$weather.wst_elev$weather.tav$weather.tamp$weather.refht$weather.wndht
+@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT CLIM_ID CLIM_CA
+$weather.insi$weather.wst_lat$weather.wst_long$weather.wst_elev$weather.tav$weather.tamp$weather.refht$weather.wndht$weather.clim_id$weather.clim_cat
 @DATE    YYYY  MM  DD  SRAD  TMAX  TMIN  RAIN  WIND  DEWP  VPRS  RHUM
 #foreach($daily in $weather.dailyWeather)
 $daily.date$daily.year$daily.month$daily.day$daily.srad$daily.tmax$daily.tmin$daily.rain$daily.wind$daily.tdew$daily.vprsd$daily.rhumd
