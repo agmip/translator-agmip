@@ -95,7 +95,7 @@ public class AgmipInput implements TranslatorInput {
 
 
             // Handle the rest of the values with help for -99 values
-            String[] locKeys = {"wst_lat", "wst_long", "wst_elev", "tav", "tamp", "refht", "wndht"};
+            String[] locKeys = {"wst_lat", "wst_long", "wst_elev", "tav", "tamp", "refht", "wndht", "clim_id", "clim_cat"};
             int l = locKeys.length;
             for (int i = 0; i < l; i++) {
                 String val = locationData.get(locKeys[i]);
@@ -216,6 +216,11 @@ public class AgmipInput implements TranslatorInput {
                     title = "tamp";
                 } else if ("amp".equals(title)) {
                     title = "tamp";
+                } else if ("clim_id".equals(title)) {
+                    len = 8;
+                } else if ("clim_ca".equals(title)) {
+                    title = "clim_cat";
+                    len = 8;
                 }
 //                else if ("cco2".equals(title) || "co2".equals(title)) {
 //                    title = "co2y";
