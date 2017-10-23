@@ -186,6 +186,9 @@ public class AceWeatherAdaptor {
     private String formatNumStr(int bits, String str) {
 
         String ret;
+        if (str == null) {
+            str = "";
+        }
         String[] inputStr = str.split("\\.");
         if (str.trim().equals("")) {
             ret = String.format("%" + bits + "s", "");
